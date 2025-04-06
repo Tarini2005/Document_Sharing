@@ -1,14 +1,6 @@
-# Web Application Exercise
-
-A little exercise to build a web application following an agile development process. See the [instructions](instructions.md) for more detail.
-
-## Product vision statement
+# Web App
 
 Site for students to share course materials and help those taking the same class later.
-
-## User stories
-
-[Link to User Stories](https://github.com/software-students-spring2025/2-web-app-super_awesome/issues/27)
 
 ## Steps necessary to run the software
 
@@ -47,6 +39,3 @@ Site for students to share course materials and help those taking the same class
 
 6. Access the application at `http://localhost:5001`
 
-## Task boards
-
-[Link to Task Board](https://github.com/orgs/software-students-spring2025/projects/112)
