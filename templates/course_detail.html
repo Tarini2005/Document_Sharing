@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.code }} - {{ course.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .course-header, .course-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section {
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .material-list, .discussion-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .material-item, .discussion-item {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .material-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: var(--primary-color, #007bff);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            max-width: 150px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .upload-form input[type="file"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .new-discussion textarea {
+            width: 100%;
+            min-height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('courses') }}" class="back-link">← Back to Courses</a>
+        <div class="course-header">
+            <h1>{{ course.code }} - {{ course.name }}</h1>
+            <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+            {% if course.description %}
+                <p><strong>Description:</strong> {{ course.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="course-content">
+            <div class="content-section">
+                <h2>Course Materials</h2>
+                <form class="upload-form" action="{{ url_for('upload_material', course_id=course._id) }}" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="material" required>
+                    <button type="submit" class="button">Upload</button>
+                </form>
+                <ul class="material-list">
+                    {% if materials %}
+                        {% for material in materials %}
+                        <li class="material-item">
+                            <h3>{{ material.name }}</h3>
+                            <p>{{ material.description }}</p>
+                            <div class="material-actions">
+                                <a href="{{ url_for('download_material', material_id=material._id) }}" class="button">Download</a>
+                                <form action="{{ url_for('delete_material', material_id=material._id) }}" method="POST">
+                                    <button type="submit" class="button button-delete">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <p>No materials uploaded yet.</p>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>Discussion</h2>
+                <div class="discussion-list">
+                    {% if discussions %}
+                        {% for discussion in discussions %}
+                        <div class="discussion-item">
+                            <p><strong>{{ discussion.author }}</strong>: {{ discussion.content }}</p>
+                            <small>{{ discussion.date }}</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No discussions yet.</p>
+                    {% endif %}
+                </div>
+                <div class="new-discussion">
+                    <form action="{{ url_for('add_discussion_route', course_id=course._id) }}" method="POST">
+                        <textarea name="content" placeholder="Write your discussion here..." required></textarea>
+                        <button type="submit" class="button">Post Discussion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
