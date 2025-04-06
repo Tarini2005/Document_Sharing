@@ -18,7 +18,7 @@ from database import (
 load_dotenv()
 
 app = Flask(__name__)
-app.jinja_env.globals.update(str=str)  # Allow use of str() in templates
+app.jinja_env.globals.update(str=str)
 
 # Configure Flask application
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key')
@@ -26,10 +26,9 @@ app.config['DEBUG'] = os.getenv('DEBUG', 'False').lower() == 'true'
 app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', './uploads')
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))
 
-# Create uploads directory if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# (For demo purposes; in production courses come from the DB)
+#for demo
 users = {}
 courses = [
     {"id": 1, "code": "CS101", "name": "Introduction to Computer Science", "instructor": "Dr. Smith"},
@@ -219,7 +218,6 @@ def edit_profile():
         flash("No changes were made.", "info")
     return render_template("edit_profile.html", user=user)
 
-# New route to serve uploaded files (if needed)
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
